@@ -1,0 +1,362 @@
+https://github.com/azartechnet/MKEC_MongoDB
+Development
+=============
+Windows Based Application-Java,Python,c#
+Web Based Application-Django-FrameWork-UI-UX
+MERN,MEAN,PythonStack
+Android Based Application-Java-Kotlin
+DataAnlysis
+===========
+DataScience-DL-ML-AI
+
+DataAnalytices
+===============
+PowerBI
+
+https://www.mongodb.com/try/download/shell
+test> use mkecmca
+switched to db mkecmca
+mkecmca> show dbs;
+admin        40.00 KiB
+config       60.00 KiB
+employee      8.00 KiB
+evedatabase  72.00 KiB
+food         72.00 KiB
+fullstackdb  40.00 KiB
+kavibatch    72.00 KiB
+local        80.00 KiB
+meanstack    72.00 KiB
+meanstackp   72.00 KiB
+mernstackp2  72.00 KiB
+mydatabase   72.00 KiB
+nishmadb     72.00 KiB
+pgp          40.00 KiB
+reactdb       8.00 KiB
+saidb        72.00 KiB
+mkecmca> db.createCollection('mycol');
+{ ok: 1 }
+mkecmca> db.mycol.insert({name:"azar",age:34,email:"azar@gmail.com",salary:1000});
+DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("656edb12254efea775c10d32") }
+}
+mkecmca> db.mycol.insertOne({name:"azar1",age:35,email:"azar1@gmail.com",salary:1000});
+{
+  acknowledged: true,
+  insertedId: ObjectId("656edca7254efea775c10d33")
+}
+mkecmca> db.mycol.find();
+[
+  {
+    _id: ObjectId("656edb12254efea775c10d32"),
+    name: 'azar',
+    age: 34,
+    email: 'azar@gmail.com',
+    salary: 1000
+  },
+  {
+    _id: ObjectId("656edca7254efea775c10d33"),
+    name: 'azar1',
+    age: 35,
+    email: 'azar1@gmail.com',
+    salary: 1000
+  }
+]
+mkecmca>
+
+mkecmca> db.mycol.insertMany([{name:"azar2",age:36,email:"azar2@gmail.com",salary:2000},{name:"azar3",age:37,email:"azar3@gmail.com",salary:1500}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("656ee087254efea775c10d34"),
+    '1': ObjectId("656ee087254efea775c10d35")
+  }
+}
+mkecmca> show dbs;
+admin         40.00 KiB
+config       108.00 KiB
+employee       8.00 KiB
+evedatabase   72.00 KiB
+food          72.00 KiB
+fullstackdb   40.00 KiB
+kavibatch     72.00 KiB
+local         80.00 KiB
+meanstack     72.00 KiB
+meanstackp    72.00 KiB
+mernstackp2   72.00 KiB
+mkecmca       72.00 KiB
+mydatabase    72.00 KiB
+nishmadb      72.00 KiB
+pgp           40.00 KiB
+reactdb        8.00 KiB
+saidb         72.00 KiB
+mkecmca> db.mycol.find().pretty();
+[
+  {
+    _id: ObjectId("656edb12254efea775c10d32"),
+    name: 'azar',
+    age: 34,
+    email: 'azar@gmail.com',
+    salary: 1000
+  },
+  {
+    _id: ObjectId("656edca7254efea775c10d33"),
+    name: 'azar1',
+    age: 35,
+    email: 'azar1@gmail.com',
+    salary: 1000
+  },
+  {
+    _id: ObjectId("656ee087254efea775c10d34"),
+    name: 'azar2',
+    age: 36,
+    email: 'azar2@gmail.com',
+    salary: 2000
+  },
+  {
+    _id: ObjectId("656ee087254efea775c10d35"),
+    name: 'azar3',
+    age: 37,
+    email: 'azar3@gmail.com',
+    salary: 1500
+  }
+]
+mkecmca> db.mycol.find({name:"azar1"})
+[
+  {
+    _id: ObjectId("656edca7254efea775c10d33"),
+    name: 'azar1',
+    age: 35,
+    email: 'azar1@gmail.com',
+    salary: 1000
+  }
+]
+mkecmca> db.mycol.find({salary>=1500})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:21)
+
+> 1 | db.mycol.find({salary>=1500})
+    |                      ^
+  2 |
+
+mkecmca> db.mycol.find({salary=1500})
+... ;
+Uncaught:
+SyntaxError: Invalid shorthand property initializer. (1:21)
+
+> 1 | db.mycol.find({salary=1500})
+    |                      ^
+  2 | ;
+  3 |
+
+mkecmca> db.mycol.find({salary:1500})
+[
+  {
+    _id: ObjectId("656ee087254efea775c10d35"),
+    name: 'azar3',
+    age: 37,
+    email: 'azar3@gmail.com',
+    salary: 1500
+  }
+]
+mkecmca> db.mycol.find({name:"azar3",salary:1500})
+[
+  {
+    _id: ObjectId("656ee087254efea775c10d35"),
+    name: 'azar3',
+    age: 37,
+    email: 'azar3@gmail.com',
+    salary: 1500
+  }
+]
+mkecmca> db.mycol.find({name:"azar3",salary:4000})
+
+mkecmca> db.mycol.find({name:"azar3",salary:4000},{name:"azar2",salary:1000})
+
+mkecmca> db.mycol.find({name:"azar3",salary:1500},{name:"azar2",salary:1000})
+[
+  {
+    _id: ObjectId("656ee087254efea775c10d35"),
+    salary: 1500,
+    name: 'azar2'
+  }
+]
+mkecmca> db.mycol.find({name:"azar7",salary:1000})
+
+mkecmca> db.mycol.find({$or:[{name:"azar7",salary:1000}]})
+
+mkecmca> db.mycol.find({$or:[{name:"azar7",salary:1500}]})
+
+mkecmca> db.mycol.find({$or:[{name:"azar7"},{salary:1500}]})
+[
+  {
+    _id: ObjectId("656ee087254efea775c10d35"),
+    name: 'azar3',
+    age: 37,
+    email: 'azar3@gmail.com',
+    salary: 1500
+  }
+]
+mkecmca>
+
+mkecmca> db.find({salary:{$in{1500,2000}}});
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:20)
+
+> 1 | db.find({salary:{$in{1500,2000}}});
+    |                     ^
+  2 |
+
+mkecmca> db.mycol.find({salary:{$in{1500,2000}}});
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:26)
+
+> 1 | db.mycol.find({salary:{$in{1500,2000}}});
+    |                           ^
+  2 |
+
+mkecmca> db.mycol.find({salary:{$in:{1500,2000}}});
+Uncaught:
+SyntaxError: Unexpected token (1:32)
+
+> 1 | db.mycol.find({salary:{$in:{1500,2000}}});
+    |                                 ^
+  2 |
+
+mkecmca> db.mycol.find({salary:{$in:[1500,2000]}});
+[
+  {
+    _id: ObjectId("656ee087254efea775c10d34"),
+    name: 'azar2',
+    age: 36,
+    email: 'azar2@gmail.com',
+    salary: 2000
+  },
+  {
+    _id: ObjectId("656ee087254efea775c10d35"),
+    name: 'azar3',
+    age: 37,
+    email: 'azar3@gmail.com',
+    salary: 1500
+  }
+]
+mkecmca> db.mycol.find();
+[
+  {
+    _id: ObjectId("656edb12254efea775c10d32"),
+    name: 'azar',
+    age: 34,
+    email: 'azar@gmail.com',
+    salary: 1000
+  },
+  {
+    _id: ObjectId("656edca7254efea775c10d33"),
+    name: 'azar1',
+    age: 35,
+    email: 'azar1@gmail.com',
+    salary: 1000
+  },
+  {
+    _id: ObjectId("656ee087254efea775c10d34"),
+    name: 'azar2',
+    age: 36,
+    email: 'azar2@gmail.com',
+    salary: 2000
+  },
+  {
+    _id: ObjectId("656ee087254efea775c10d35"),
+    name: 'azar3',
+    age: 37,
+    email: 'azar3@gmail.com',
+    salary: 1500
+  }
+]
+mkecmca> db.mycol.find({name:"azar"},{age:0,salary:1})
+MongoServerError: Cannot do inclusion on field salary in exclusion projection
+mkecmca> db.mycol.find({name:"azar"},{age:0},{salary:1})
+[
+  {
+    _id: ObjectId("656edb12254efea775c10d32"),
+    name: 'azar',
+    email: 'azar@gmail.com',
+    salary: 1000
+  }
+]
+mkecmca> db.mycol.find({name:"azar"},{age:1},{email:1},{salary:1})
+[ { _id: ObjectId("656edb12254efea775c10d32"), age: 34 } ]
+mkecmca> db.mycol.find({name:"azar"},{age:0},{email:1},{salary:1})
+[
+  {
+    _id: ObjectId("656edb12254efea775c10d32"),
+    name: 'azar',
+    email: 'azar@gmail.com',
+    salary: 1000
+  }
+]
+mkecmca> db.mycol.find({name:"azar"},{email:1},{age:1},{salary:1})
+[
+  {
+    _id: ObjectId("656edb12254efea775c10d32"),
+    email: 'azar@gmail.com'
+  }
+]
+mkecmca> db.mycol.find({},{email:1},{age:1},{salary:1})
+[
+  {
+    _id: ObjectId("656edb12254efea775c10d32"),
+    email: 'azar@gmail.com'
+  },
+  {
+    _id: ObjectId("656edca7254efea775c10d33"),
+    email: 'azar1@gmail.com'
+  },
+  {
+    _id: ObjectId("656ee087254efea775c10d34"),
+    email: 'azar2@gmail.com'
+  },
+  {
+    _id: ObjectId("656ee087254efea775c10d35"),
+    email: 'azar3@gmail.com'
+  }
+]
+mkecmca> db.mycol.find({},{email:0},{age:1},{salary:1})
+[
+  {
+    _id: ObjectId("656edb12254efea775c10d32"),
+    name: 'azar',
+    age: 34,
+    salary: 1000
+  },
+  {
+    _id: ObjectId("656edca7254efea775c10d33"),
+    name: 'azar1',
+    age: 35,
+    salary: 1000
+  },
+  {
+    _id: ObjectId("656ee087254efea775c10d34"),
+    name: 'azar2',
+    age: 36,
+    salary: 2000
+  },
+  {
+    _id: ObjectId("656ee087254efea775c10d35"),
+    name: 'azar3',
+    age: 37,
+    salary: 1500
+  }
+]
+mkecmca> db.mycol.find({},{name:1,_id:0,salary:1}).pretty()
+[
+  { name: 'azar', salary: 1000 },
+  { name: 'azar1', salary: 1000 },
+  { name: 'azar2', salary: 2000 },
+  { name: 'azar3', salary: 1500 }
+]
+mkecmca> db.createCollection('mycol1');
+{ ok: 1 }
+mkecmca> db.mycol1.insertOne({_id:1001,name:"azar1",age:34,salary:1000})
+{ acknowledged: true, insertedId: 1001 }
+mkecmca> db.mycol1.find();
+[ { _id: 1001, name: 'azar1', age: 34, salary: 1000 } ]
