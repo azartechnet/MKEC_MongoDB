@@ -1,0 +1,455 @@
+Microsoft Windows [Version 10.0.22621.2715]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\azart>cd C:\Program Files\MongoDB\Server\6.0\bin
+
+C:\Program Files\MongoDB\Server\6.0\bin>mongosh.exe
+Current Mongosh Log ID: 656fee74735aaf721ca1c918
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.10.1
+Using MongoDB:          6.0.8
+Using Mongosh:          1.10.1
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2023-12-05T22:50:26.901+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+Warning: Found ~/.mongorc.js, but not ~/.mongoshrc.js. ~/.mongorc.js will not be loaded.
+  You may want to copy or rename ~/.mongorc.js to ~/.mongoshrc.js.
+test> use mkecmca
+switched to db mkecmca
+mkecmca> show collection
+MongoshInvalidInputError: [COMMON-10001] 'collection' is not a valid argument for "show".
+mkecmca> show collections;
+mycol
+mycol1
+mkecmca> db.mycol1.drop();
+true
+mkecmca> show collections;
+mycol
+mkecmca> db.mycol.find();
+[
+  {
+    _id: ObjectId("656edb12254efea775c10d32"),
+    name: 'azar',
+    age: 34,
+    email: 'azar@gmail.com',
+    salary: 1000
+  },
+  {
+    _id: ObjectId("656edca7254efea775c10d33"),
+    name: 'azar1',
+    age: 35,
+    email: 'azar1@gmail.com',
+    salary: 1000
+  },
+  {
+    _id: ObjectId("656ee087254efea775c10d34"),
+    name: 'azar2',
+    age: 36,
+    email: 'azar2@gmail.com',
+    salary: 2000
+  },
+  {
+    _id: ObjectId("656ee087254efea775c10d35"),
+    name: 'azar3',
+    age: 37,
+    email: 'azar3@gmail.com',
+    salary: 1500
+  }
+]
+mkecmca> db.mycol.find({name:"azar3"});
+[
+  {
+    _id: ObjectId("656ee087254efea775c10d35"),
+    name: 'azar3',
+    age: 37,
+    email: 'azar3@gmail.com',
+    salary: 1500
+  }
+]
+mkecmca> db.mycol.update({name:"azar3"},
+... {
+... $set:{email:["xyz@gmail.com"]}
+... }
+... );
+DeprecationWarning: Collection.update() is deprecated. Use updateOne, updateMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+mkecmca> db.mycol.find({name:"azar3"});
+[
+  {
+    _id: ObjectId("656ee087254efea775c10d35"),
+    name: 'azar3',
+    age: 37,
+    email: [ 'xyz@gmail.com' ],
+    salary: 1500
+  }
+]
+mkecmca> db.mycol.update({ name: "azar3" }, { $set: { email: "xyz@gmail.com",salary:4000}});
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+mkecmca> db.mycol.updateMany(
+... {age:{$gt:"23"}},
+... {$set:{salary:5000}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+mkecmca> db.mycol.updateMany( { age: { $gt: 23 } }, { $set: { salary: 5000 } })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 4,
+  modifiedCount: 4,
+  upsertedCount: 0
+}
+mkecmca> db.mycol.find();
+[
+  {
+    _id: ObjectId("656edb12254efea775c10d32"),
+    name: 'azar',
+    age: 34,
+    email: 'azar@gmail.com',
+    salary: 5000
+  },
+  {
+    _id: ObjectId("656edca7254efea775c10d33"),
+    name: 'azar1',
+    age: 35,
+    email: 'azar1@gmail.com',
+    salary: 5000
+  },
+  {
+    _id: ObjectId("656ee087254efea775c10d34"),
+    name: 'azar2',
+    age: 36,
+    email: 'azar2@gmail.com',
+    salary: 5000
+  },
+  {
+    _id: ObjectId("656ee087254efea775c10d35"),
+    name: 'azar3',
+    age: 37,
+    email: 'xyz@gmail.com',
+    salary: 5000
+  }
+]
+mkecmca> db.mycol.find({age:1});
+
+mkecmca> db.mycol.find({},{age:1});
+[
+  { _id: ObjectId("656edb12254efea775c10d32"), age: 34 },
+  { _id: ObjectId("656edca7254efea775c10d33"), age: 35 },
+  { _id: ObjectId("656ee087254efea775c10d34"), age: 36 },
+  { _id: ObjectId("656ee087254efea775c10d35"), age: 37 }
+]
+mkecmca> db.mycol.deleteOne({age:{$in:[34,35]}});
+{ acknowledged: true, deletedCount: 1 }
+mkecmca> db.mycol.deleteMany({age:{$in:[36,35]}});
+{ acknowledged: true, deletedCount: 2 }
+mkecmca> db.mycol.remove({name:"azar3"})
+DeprecationWarning: Collection.remove() is deprecated. Use deleteOne, deleteMany, findOneAndDelete, or bulkWrite.
+{ acknowledged: true, deletedCount: 1 }
+mkecmca> db.mycol.find();
+
+mkecmca> show collections;
+mycol
+mkecmca>  db.mycol.insertMany([{name:"azar2",age:36,email:"azar2@gmail.com",salary:2000},{name:"azar3",age:37,email:"azar3@gmail.com",salary:1500}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("65700f75735aaf721ca1c919"),
+    '1': ObjectId("65700f75735aaf721ca1c91a")
+  }
+}
+mkecmca> db.mycol.find();
+[
+  {
+    _id: ObjectId("65700f75735aaf721ca1c919"),
+    name: 'azar2',
+    age: 36,
+    email: 'azar2@gmail.com',
+    salary: 2000
+  },
+  {
+    _id: ObjectId("65700f75735aaf721ca1c91a"),
+    name: 'azar3',
+    age: 37,
+    email: 'azar3@gmail.com',
+    salary: 1500
+  }
+]
+mkecmca> db.mycol.find().limit(1)
+[
+  {
+    _id: ObjectId("65700f75735aaf721ca1c919"),
+    name: 'azar2',
+    age: 36,
+    email: 'azar2@gmail.com',
+    salary: 2000
+  }
+]
+mkecmca> db.mycol.find().skip(1)
+[
+  {
+    _id: ObjectId("65700f75735aaf721ca1c91a"),
+    name: 'azar3',
+    age: 37,
+    email: 'azar3@gmail.com',
+    salary: 1500
+  }
+]
+mkecmca>  db.mycol.insertMany([{name:"azar5",age:36,email:"azar5@gmail.com",salary:2000},{name:"azar4",age:36,email:"azar3@gmail.com",salary:2500}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("6570126a735aaf721ca1c91b"),
+    '1': ObjectId("6570126a735aaf721ca1c91c")
+  }
+}
+mkecmca> db.mycol.find();
+[
+  {
+    _id: ObjectId("65700f75735aaf721ca1c919"),
+    name: 'azar2',
+    age: 36,
+    email: 'azar2@gmail.com',
+    salary: 2000
+  },
+  {
+    _id: ObjectId("65700f75735aaf721ca1c91a"),
+    name: 'azar3',
+    age: 37,
+    email: 'azar3@gmail.com',
+    salary: 1500
+  },
+  {
+    _id: ObjectId("6570126a735aaf721ca1c91b"),
+    name: 'azar5',
+    age: 36,
+    email: 'azar5@gmail.com',
+    salary: 2000
+  },
+  {
+    _id: ObjectId("6570126a735aaf721ca1c91c"),
+    name: 'azar4',
+    age: 36,
+    email: 'azar3@gmail.com',
+    salary: 2500
+  }
+]
+mkecmca> db.mycol.findOne();
+{
+  _id: ObjectId("65700f75735aaf721ca1c919"),
+  name: 'azar2',
+  age: 36,
+  email: 'azar2@gmail.com',
+  salary: 2000
+}
+mkecmca> db.mycol.findOne({age:36})
+{
+  _id: ObjectId("65700f75735aaf721ca1c919"),
+  name: 'azar2',
+  age: 36,
+  email: 'azar2@gmail.com',
+  salary: 2000
+}
+mkecmca> db.mycol.findAndModify({query:{name:"azar2"},update:{$inc:{salary:1000}}})
+{
+  _id: ObjectId("65700f75735aaf721ca1c919"),
+  name: 'azar2',
+  age: 36,
+  email: 'azar2@gmail.com',
+  salary: 2000
+}
+mkecmca> db.mycol.distinct("name")
+[ 'azar2', 'azar3', 'azar4', 'azar5' ]
+mkecmca> db.mycol.count();
+DeprecationWarning: Collection.count() is deprecated. Use countDocuments or estimatedDocumentCount.
+4
+mkecmca> db.mycol.find({},{salary:1,_id:0}).sort({salary:1})
+[
+  { salary: 1500 },
+  { salary: 2000 },
+  { salary: 2500 },
+  { salary: 3000 }
+]
+mkecmca> db.mycol.find({},{salary:1,_id:0}).sort({salary:-1})
+[
+  { salary: 3000 },
+  { salary: 2500 },
+  { salary: 2000 },
+  { salary: 1500 }
+]
+mkecmca> db.mycol.aggregate([{$group:{_id:"$type",salary:{$sum:1}}}])
+[ { _id: null, salary: 4 } ]
+mkecmca> db.mycol.aggregate([{$group:{_id:"$type",name:{$sum:1}}}])
+[ { _id: null, name: 4 } ]
+mkecmca> db.mycol.aggregate([{$group:{_id:"$type",salary:{$max:1}}}])
+[ { _id: null, salary: 1 } ]
+mkecmca> db.mycol.aggregate([{$group:{_id:"$type",salary:{$min:1}}}])
+[ { _id: null, salary: 1 } ]
+mkecmca> db.mycol.createIndex({name:1})
+name_1
+mkecmca> db.mycol.createIndex({salary:-1})
+salary_-1
+mkecmca> db.mycol.find();
+[
+  {
+    _id: ObjectId("65700f75735aaf721ca1c919"),
+    name: 'azar2',
+    age: 36,
+    email: 'azar2@gmail.com',
+    salary: 3000
+  },
+  {
+    _id: ObjectId("65700f75735aaf721ca1c91a"),
+    name: 'azar3',
+    age: 37,
+    email: 'azar3@gmail.com',
+    salary: 1500
+  },
+  {
+    _id: ObjectId("6570126a735aaf721ca1c91b"),
+    name: 'azar5',
+    age: 36,
+    email: 'azar5@gmail.com',
+    salary: 2000
+  },
+  {
+    _id: ObjectId("6570126a735aaf721ca1c91c"),
+    name: 'azar4',
+    age: 36,
+    email: 'azar3@gmail.com',
+    salary: 2500
+  }
+]
+mkecmca> db.mycol.bulkWrite([
+... {insertOne:{"document":{name:"azar6",age:34,salary:1000}}},
+... {insertOne:{"document":{name:"azar7",age:35,salary:1500}}}]);
+{
+  acknowledged: true,
+  insertedCount: 2,
+  insertedIds: {
+    '0': ObjectId("65703953735aaf721ca1c91d"),
+    '1': ObjectId("65703953735aaf721ca1c91e")
+  },
+  matchedCount: 0,
+  modifiedCount: 0,
+  deletedCount: 0,
+  upsertedCount: 0,
+  upsertedIds: {}
+}
+mkecmca> db.mycol.find();
+[
+  {
+    _id: ObjectId("65700f75735aaf721ca1c919"),
+    name: 'azar2',
+    age: 36,
+    email: 'azar2@gmail.com',
+    salary: 3000
+  },
+  {
+    _id: ObjectId("65700f75735aaf721ca1c91a"),
+    name: 'azar3',
+    age: 37,
+    email: 'azar3@gmail.com',
+    salary: 1500
+  },
+  {
+    _id: ObjectId("6570126a735aaf721ca1c91b"),
+    name: 'azar5',
+    age: 36,
+    email: 'azar5@gmail.com',
+    salary: 2000
+  },
+  {
+    _id: ObjectId("6570126a735aaf721ca1c91c"),
+    name: 'azar4',
+    age: 36,
+    email: 'azar3@gmail.com',
+    salary: 2500
+  },
+  {
+    _id: ObjectId("65703953735aaf721ca1c91d"),
+    name: 'azar6',
+    age: 34,
+    salary: 1000
+  },
+  {
+    _id: ObjectId("65703953735aaf721ca1c91e"),
+    name: 'azar7',
+    age: 35,
+    salary: 1500
+  }
+]
+mkecmca> try{
+... db.mycol.bulkWrite([
+... {insertOne:{"document":{name:"azar8",age:55,salary:2000}}}]);
+... }catch(e){
+... print(e);
+... }
+{
+  acknowledged: true,
+  insertedCount: 1,
+  insertedIds: { '0': ObjectId("65703c30735aaf721ca1c91f") },
+  matchedCount: 0,
+  modifiedCount: 0,
+  deletedCount: 0,
+  upsertedCount: 0,
+  upsertedIds: {}
+}
+mkecmca> try { db.mycol.bulkWrite([ { insertOne: { "document": { name: "azar8", age: 55, salary: 2000  } }]); } catch (e) { print(e); }
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:97)
+
+> 1 | try { db.mycol.bulkWrite([ { insertOne: { "document": { name: "azar8", age: 55, salary: 2000  } }]); } catch (e) { print(e); }
+    |
+       ^
+  2 |
+
+mkecmca> try { db.mycol.bulkWrite([ { insertone: { "document": { name: "azar8", age: 55, salary: 2000  } }]); } catch (e) { print(e); }
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:97)
+
+> 1 | try { db.mycol.bulkWrite([ { insertone: { "document": { name: "azar8", age: 55, salary: 2000  } }]); } catch (e) { print(e); }
+    |
+       ^
+  2 |
+
+mkecmca> try { db.mycol.bulkWrite([ { insertone: { "document": { name: "azar8", age: 55, salary: 2000  } }]); } catch (e) { print("error"); }
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:97)
+
+> 1 | try { db.mycol.bulkWrite([ { insertone: { "document": { name: "azar8", age: 55, salary: 2000  } }]); } catch (e) { print("error"); }
+    |
+       ^
+  2 |
+
+mkecmca> try { db.mycol.bulkWrite([ { insertOne: { "document": { name: "azar8", age: 55, salary: 2000 } } }]); } catch (e) { print(e); }
+{
+  acknowledged: true,
+  insertedCount: 1,
+  insertedIds: { '0': ObjectId("65703cb4735aaf721ca1c920") },
+  matchedCount: 0,
+  modifiedCount: 0,
+  deletedCount: 0,
+  upsertedCount: 0,
+  upsertedIds: {}
+}
