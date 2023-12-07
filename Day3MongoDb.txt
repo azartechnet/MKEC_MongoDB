@@ -1,0 +1,352 @@
+Microsoft Windows [Version 10.0.22621.2715]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\azart>mongosh "mongodb+srv://cluster0.ugfvyks.mongodb.net/" --apiVersion 1 --username admin
+Enter password: *****
+Current Mongosh Log ID: 657146dd68cd978d7ec45096
+Connecting to:          mongodb+srv://<credentials>@cluster0.ugfvyks.mongodb.net/?appName=mongosh+1.10.1
+Using MongoDB:          6.0.12 (API Version 1)
+Using Mongosh:          1.10.1
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+Warning: Found ~/.mongorc.js, but not ~/.mongoshrc.js. ~/.mongorc.js will not be loaded.
+  You may want to copy or rename ~/.mongorc.js to ~/.mongoshrc.js.
+Atlas atlas-mvatyc-shard-0 [primary] test> show dbs;
+admin  232.00 KiB
+local   32.37 GiB
+Atlas atlas-mvatyc-shard-0 [primary] test> db.createCollection('mycol');
+{ ok: 1 }
+Atlas atlas-mvatyc-shard-0 [primary] test> db.mycol.insertOne({_id:1001,name:"azar1",age:33,email:"azar1@gmail.com",salary:1000});
+{ acknowledged: true, insertedId: 1001 }
+Atlas atlas-mvatyc-shard-0 [primary] test> db.mycol.insertMany([{_id:1002,name:"azar2",age:34,email:"azar2@gmail.com",salary:1500},{_id:1003,name:"azar3",age:45,email:"azar3@gmail.com",salary:2000}]);
+{ acknowledged: true, insertedIds: { '0': 1002, '1': 1003 } }
+Atlas atlas-mvatyc-shard-0 [primary] test> db.mycol.update({_id:1001},{$set:{salary:4000}});
+DeprecationWarning: Collection.update() is deprecated. Use updateOne, updateMany, or bulkWrite.
+{
+
+Atlas atlas-mvatyc-shard-0 [primary] test> use mkcedb;
+switched to db mkcedb
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> show collections;
+mycol2
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.find();
+[
+  {
+    _id: 1001,
+    name: 'azar1',
+    age: 34,
+    email: 'azar1@gmail.com',
+    salary: 1000
+  },
+  {
+    _id: 1002,
+    name: 'azar2',
+    age: 34,
+    email: 'azar2@gmail.com',
+    salary: 1500
+  }
+]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol1.find();
+
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.find();
+[
+  {
+    _id: 1001,
+    name: 'azar1',
+    age: 34,
+    email: 'azar1@gmail.com',
+    salary: 1000
+  },
+  {
+    _id: 1002,
+    name: 'azar2',
+    age: 34,
+    email: 'azar2@gmail.com',
+    salary: 1500
+  }
+]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.findOneAndDelete({name:"azar1"});
+null
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.find();
+[
+  {
+    _id: 1001,
+    name: 'mohamed',
+    age: 34,
+    email: 'azar1@gmail.com',
+    salary: 1000
+  },
+  {
+    _id: 1002,
+    name: 'azar2',
+    age: 34,
+    email: 'azar2@gmail.com',
+    salary: 1500
+  }
+]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.findOneAndDelete({name:"mohamed"});
+{
+  _id: 1001,
+  name: 'mohamed',
+  age: 34,
+  email: 'azar1@gmail.com',
+  salary: 1000
+}
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.find();
+[
+  {
+    _id: 1002,
+    name: 'azar2',
+    age: 34,
+    email: 'azar2@gmail.com',
+    salary: 1500
+  }
+]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> try{
+... db.mycol2.bulkWrite([
+... {insertOne:{"document":{_id:2001,
+... name:"azar4",age:45,email:"azar4@gmail.com",salary:2000}}},
+... {insertOne:{"document":{_id:2002,
+... name:"azar5",age:46,email:"azar5@gmail.com",salary:2500}}}
+... ]);
+... }catch(e){
+... print(e);
+... }
+{
+  acknowledged: true,
+  insertedCount: 2,
+  insertedIds: { '0': 2001, '1': 2002 },
+  matchedCount: 0,
+  modifiedCount: 0,
+  deletedCount: 0,
+  upsertedCount: 0,
+  upsertedIds: {}
+}
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> try{
+... db.mycol2.bulkWrite([
+... {updateOne:{
+... "filter":{_id:2001},
+... "update":{$set:{salary:6000}}
+... }}
+... ]);
+... }catch(e){
+... print(e);
+... }
+{
+  acknowledged: true,
+  insertedCount: 0,
+  insertedIds: {},
+  matchedCount: 1,
+  modifiedCount: 1,
+  deletedCount: 0,
+  upsertedCount: 0,
+  upsertedIds: {}
+}
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> try { db.mycol2.bulkWrite([ { updateOne: { "filter": {"_id": 2001 }, "update": { $set: { salary: 6000 } } } }]); } catch (e) { print(e); }
+{
+  acknowledged: true,
+  insertedCount: 0,
+  insertedIds: {},
+  matchedCount: 1,
+  modifiedCount: 0,
+  deletedCount: 0,
+  upsertedCount: 0,
+  upsertedIds: {}
+}
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.createIndexes({name:1});
+TypeError: e.map is not a function
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.createIndexes([{name:1}]);
+[ 'name_1' ]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.get
+db.mycol2.getIndexes        db.mycol2.getIndexSpecs     db.mycol2.getIndices
+db.mycol2.getIndexKeys      db.mycol2.getDB             db.mycol2.getMongo
+db.mycol2.getFullName       db.mycol2.getName           db.mycol2.getPlanCache
+db.mycol2.getSearchIndexes
+
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.getIndexes();
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { name: 1 }, name: 'name_1' }
+]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.dropIndexes({_id:1})
+MongoServerError: cannot drop _id index
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.dropIndexes({_id_:1})
+MongoshInternalError: can't find index with key: { _id_: 1 }
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.dropIndexes({name_1:1})
+MongoshInternalError: can't find index with key: { name_1: 1 }
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.dropIndexes({name:1})
+{
+  nIndexesWas: 2,
+  ok: 1,
+  '$clusterTime': {
+    clusterTime: Timestamp({ t: 1701937196, i: 3 }),
+    signature: {
+      hash: Binary(Buffer.from("f7c83120111f112252be0c41d99d37b8438023dc", "hex"), 0),
+      keyId: Long("7309381498468040709")
+    }
+  },
+  operationTime: Timestamp({ t: 1701937196, i: 2 })
+}
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.dropIndexes("name_1")
+MongoshInternalError: index not found with name [name_1]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.createIndexes([{name:1}]);
+[ 'name_1' ]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.getIndexes();
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { name: 1 }, name: 'name_1' }
+]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.dropIndexes("name_1")
+{
+  nIndexesWas: 2,
+  ok: 1,
+  '$clusterTime': {
+    clusterTime: Timestamp({ t: 1701937354, i: 16 }),
+    signature: {
+      hash: Binary(Buffer.from("1f36668d74fcc10ca3f3988964a979c4d7f10105", "hex"), 0),
+      keyId: Long("7309381498468040709")
+    }
+  },
+  operationTime: Timestamp({ t: 1701937354, i: 16 })
+}
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.copyTo("mycol3")
+TypeError: db.mycol2.copyTo is not a function
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.createCollection("mycol3");
+{ ok: 1 }
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.copyTo("mycol3")
+TypeError: db.mycol2.copyTo is not a function
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol3.copyTo("mycol2")
+TypeError: db.mycol3.copyTo is not a function
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.c
+db.mycol2.constructor                      db.mycol2.countDocuments
+db.mycol2.compactStructuredEncryptionData  db.mycol2.convertToCapped
+db.mycol2.createIndexes                    db.mycol2.createIndex
+db.mycol2.configureQueryAnalyzer           db.mycol2.createSearchIndex
+db.mycol2.createSearchIndexes
+
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.find
+db.mycol2.find               db.mycol2.findOne            db.mycol2.findOneAndDelete
+db.mycol2.findOneAndReplace  db.mycol2.findOneAndUpdate
+
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.find();
+[
+  {
+    _id: 1002,
+    name: 'azar2',
+    age: 34,
+    email: 'azar2@gmail.com',
+    salary: 1500
+  },
+  {
+    _id: 2001,
+    name: 'azar4',
+    age: 45,
+    email: 'azar4@gmail.com',
+    salary: 6000
+  },
+  {
+    _id: 2002,
+    name: 'azar5',
+    age: 46,
+    email: 'azar5@gmail.com',
+    salary: 2500
+  }
+]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.find({$and:[{name:"azar5"},{salary:2500}]}).pretty()
+[
+  {
+    _id: 2002,
+    name: 'azar5',
+    age: 46,
+    email: 'azar5@gmail.com',
+    salary: 2500
+  }
+]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.find({$and:[{name:"azar5"},{salary:25000}]}).pretty()
+
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.mycol2.find({salary:{$not:{$gt:2000}}}).pretty()
+[
+  {
+    _id: 1002,
+    name: 'azar2',
+    age: 34,
+    email: 'azar2@gmail.com',
+    salary: 1500
+  }
+]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.createCollections('employee')
+TypeError: db.createCollections is not a function
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.createCollection('employee')
+{ ok: 1 }
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.employee.insertMany([{
+... name:"azar1",age:32,position:"backend developer"},
+... {name:"azar2",age:25,position:"frontend developer"}]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("65719bcb68cd978d7ec45097"),
+    '1': ObjectId("65719bcb68cd978d7ec45098")
+  }
+}
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.employee.find({position:{$regex:"developer"}}).pretty();
+[
+  {
+    _id: ObjectId("65719bcb68cd978d7ec45097"),
+    name: 'azar1',
+    age: 32,
+    position: 'backend developer'
+  },
+  {
+    _id: ObjectId("65719bcb68cd978d7ec45098"),
+    name: 'azar2',
+    age: 25,
+    position: 'frontend developer'
+  }
+]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.employee.find({position:{$regex:"backend"}}).pretty();
+[
+  {
+    _id: ObjectId("65719bcb68cd978d7ec45097"),
+    name: 'azar1',
+    age: 32,
+    position: 'backend developer'
+  }
+]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.employee.find({position:{$regex:"backend",$options:"i"}}).pretty();
+[
+  {
+    _id: ObjectId("65719bcb68cd978d7ec45097"),
+    name: 'azar1',
+    age: 32,
+    position: 'backend developer'
+  }
+]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.employee.find(
+... {position:{$regex:"^f"}}).pretty();
+[
+  {
+    _id: ObjectId("65719bcb68cd978d7ec45098"),
+    name: 'azar2',
+    age: 25,
+    position: 'frontend developer'
+  }
+]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.employee.find( { position: { $regex: "f$" } }).pretty();
+
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb> db.employee.find(
+... {name:/az/}).pretty()
+[
+  {
+    _id: ObjectId("65719bcb68cd978d7ec45097"),
+    name: 'azar1',
+    age: 32,
+    position: 'backend developer'
+  },
+  {
+    _id: ObjectId("65719bcb68cd978d7ec45098"),
+    name: 'azar2',
+    age: 25,
+    position: 'frontend developer'
+  }
+]
+Atlas atlas-mvatyc-shard-0 [primary] mkcedb>
